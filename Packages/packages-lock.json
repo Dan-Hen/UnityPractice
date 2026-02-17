@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.dan.dantestpackage": {
+      "version": "https://github.com/Dan-Hen/danhentestpackages.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "ee31f7fe4831ff61444f021a5d2920f4e243be4d"
+    },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
       "depth": 0,
