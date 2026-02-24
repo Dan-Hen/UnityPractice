@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="ServerUI" style="flex-grow: 1; background-color: rgba(0, 255, 150, 0.56); position: absolute; height: 135px; width: 127px; top: 12px; left: auto; right: 12px; opacity: 1; visibility: visible;">
+        <ui:Button text="Host" name="HostButton"/>
+        <ui:Button text="Server" name="ServerButton"/>
+        <ui:Button text="Client" name="ClientButton"/>
+    </ui:VisualElement>
+</ui:UXML>
