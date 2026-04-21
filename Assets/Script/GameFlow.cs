@@ -1,3 +1,6 @@
+using System.Security.Principal;
+using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 
 public class GameFlow : MonoBehaviour
@@ -31,15 +34,33 @@ public class GameFlow : MonoBehaviour
 
     
     */
-
+    
+    public GameObject HuntedCharaPrefab;
     void Start()
     {
-        
+        for (var i = 0; i <10; i++)
+        {
+            Instantiate(HuntedCharaPrefab, new Vector3(i*2.0f, 0,0), Quaternion.identity);
+        }
+        //spawn cubes
+        //spawn a class
+        //sweep cubes
     }
 
-    void playerSweep()
+    void GameLaunch()
     {
-       
+        //choose a random cube
+        //display ui with hunted character poster
+        //start Timer()
+
+    }
+
+    void Timer()
+    {
+        //time start
+        //loop 
+        //time elapsed
+            // game over
     }
 
     // Update is called once per frame
