@@ -10,14 +10,13 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
-        Debug.Log("Moving");
+        //Debug.Log("Moving");
     }
 
     void OnLook(InputValue value)
     {  
         lookInput = value.Get<Vector2>();
-        Debug.Log(lookInput);
-
+       //Debug.Log(lookInput);
     }
 
     void OnJump()

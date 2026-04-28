@@ -1,15 +1,19 @@
-using System.Security.Principal;
-using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 
 public class GameFlow : MonoBehaviour
 {
+    
+  
     /* General Flow
+    ----- For Debug ----- 
+    [x] spwan random
+    [x] affect them an id
+    [ ] select id
+    [ ] display id
 
     ----- start of the game ----- 
 
-    enter trigger box
+    [] enter trigger box
     turn on input e for my game and switch off any unwanted behavior from other games 
     press "e" to play
     sweep player available in the world 
@@ -36,31 +40,72 @@ public class GameFlow : MonoBehaviour
     */
     
     public GameObject HuntedCharaPrefab;
+    public Material choosenColor;
+    private GameObject[] huntedPlayerList ;
+    public int AmountOfPlayer = 10;
+    private bool playerFound;
+    private float timer ;
+
+
+
+    void Awake()
+    {
+        huntedPlayerList = new GameObject[10];
+        
+        for (var i = 0; i <AmountOfPlayer; i++)
+        {
+             huntedPlayerList[i] = Instantiate(HuntedCharaPrefab, new Vector3(Random.Range(-30.0f, 30.0f), 0,Random.Range(-30.0f, 30.0f)), Quaternion.identity);
+             huntedPlayerList[i].name = "Hunted_" + i; 
+        };
+        
+    }
+
     void Start()
     {
-        for (var i = 0; i <10; i++)
-        {
-            Instantiate(HuntedCharaPrefab, new Vector3(i*2.0f, 0,0), Quaternion.identity);
-        }
-        //spawn cubes
-        //spawn a class
-        //sweep cubes
+        GameLaunch();
     }
 
     void GameLaunch()
     {
-        //choose a random cube
-        //display ui with hunted character poster
-        //start Timer()
+        int RandomPlayer = Random.Range(0, AmountOfPlayer);
+
+        //debug to see the guys easily 
+        huntedPlayerList[RandomPlayer].transform.position += new Vector3(0, 2f, 0);
+        Debug.Log("find player" + huntedPlayerList[RandomPlayer].name );
+
+        // start the timer
+        TimerStart();
+
+        // if player is found == true {}
+        if (playerFound == true)
+        {
+            TimerStop();
+        }
+
 
     }
 
-    void Timer()
+    void TimerStart()
     {
-        //time start
-        //loop 
-        //time elapsed
-            // game over
+        Debug.Log("Timer Start");
+
+        
+
+        if (timer <= 0) {
+            GameOver();
+            
+        }
+       
+    }
+
+    void TimerStop()
+    {
+        
+    }
+
+    void GameOver()
+    {
+       Debug.Log("game over, you loose");
     }
 
     // Update is called once per frame
