@@ -1,4 +1,8 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.WSA;
 
 public class GameFlow : MonoBehaviour
 {
@@ -44,12 +48,18 @@ public class GameFlow : MonoBehaviour
     private GameObject[] huntedPlayerList ;
     public int AmountOfPlayer = 10;
     private bool playerFound;
-    private float timer ;
+    public float timer;
+    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI HuntedIdText;
+    private GameObject huntedPlayer;
+    private bool IsPlaying = false;
+    
 
 
 
     void Awake()
-    {
+    {   
+        //debug generate a list of hunted player
         huntedPlayerList = new GameObject[10];
         
         for (var i = 0; i <AmountOfPlayer; i++)
@@ -58,59 +68,71 @@ public class GameFlow : MonoBehaviour
              huntedPlayerList[i].name = "Hunted_" + i; 
         };
         
+        
     }
 
-    void Start()
+    
+    void OnTriggerEnter(Collider other)
     {
-        GameLaunch();
+        if (other.CompareTag("Player") && !IsPlaying )
+        {
+            GameLaunch();
+        }
     }
 
     void GameLaunch()
     {
+        IsPlaying = true ;
+        //choose the hunted player
         int RandomPlayer = Random.Range(0, AmountOfPlayer);
+        huntedPlayer = huntedPlayerList[RandomPlayer];
 
         //debug to see the guys easily 
-        huntedPlayerList[RandomPlayer].transform.position += new Vector3(0, 2f, 0);
-        Debug.Log("find player" + huntedPlayerList[RandomPlayer].name );
+        huntedPlayer.transform.position += new Vector3(0, 2f, 0);
+        HuntedIdText.text = "Player: "+ huntedPlayer.name;
+
+        Hunted huntedScript = huntedPlayer.GetComponent<Hunted>();
+        huntedScript.gameFlow = GetComponent<GameFlow>();
+        huntedScript.Init(this);
 
         // start the timer
-        TimerStart();
-
-        // if player is found == true {}
-        if (playerFound == true)
-        {
-            TimerStop();
-        }
-
-
+        StartCoroutine(DoTimer());   
+    
     }
 
-    void TimerStart()
+    public void Win()
     {
-        Debug.Log("Timer Start");
-
-        
-
-        if (timer <= 0) {
-            GameOver();
-            
-        }
-       
-    }
-
-    void TimerStop()
-    {
-        
+        playerFound = true;
+        Debug.Log("you win");
+        Debug.Log(timer);
     }
 
     void GameOver()
     {
+       IsPlaying = false;
        Debug.Log("game over, you loose");
     }
 
-    // Update is called once per frame
-    void Update()
+     IEnumerator DoTimer()
     {
+        while (timer > 0 && playerFound != true )
+        {
+            // Update the UI
+            timerText.text = string.Format("{0:00}:{1:00}", 
+                Mathf.FloorToInt(timer / 60), 
+                Mathf.FloorToInt(timer % 60));
+
+            // Subtract the time passed since the last frame
+            timer -= Time.deltaTime;
+
+            // Wait until the next frame
+            yield return null; 
+        }
         
+        timer = 0;
+        timerText.text = "00:00";
+        Debug.Log("Time's Up!");
+
+        GameOver();
     }
 }
