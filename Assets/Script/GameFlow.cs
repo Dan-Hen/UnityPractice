@@ -43,6 +43,9 @@ public class GameFlow : MonoBehaviour
     
     */
     
+    public GameObject MainMenu;
+    public GameObject InGameHUD;
+    private bool playerInZone = false;
     public GameObject HuntedCharaPrefab;
     public Material choosenColor;
     private GameObject[] huntedPlayerList ;
@@ -59,6 +62,8 @@ public class GameFlow : MonoBehaviour
 
     void Awake()
     {   
+        InGameHUD.SetActive(false);
+        MainMenu.SetActive(false);
         //debug generate a list of hunted player
         huntedPlayerList = new GameObject[10];
         
@@ -67,8 +72,6 @@ public class GameFlow : MonoBehaviour
              huntedPlayerList[i] = Instantiate(HuntedCharaPrefab, new Vector3(Random.Range(-30.0f, 30.0f), 0,Random.Range(-30.0f, 30.0f)), Quaternion.identity);
              huntedPlayerList[i].name = "Hunted_" + i; 
         };
-        
-        
     }
 
     
@@ -76,19 +79,37 @@ public class GameFlow : MonoBehaviour
     {
         if (other.CompareTag("Player") && !IsPlaying )
         {
-            GameLaunch();
+            MainMenu.SetActive(true);
+            playerInZone = true;
+
+            MainMenu.SetActive(true);
         }
+    }
+
+       void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") )
+        {
+            CloseMenu();
+        }
+    }
+
+    public void CloseMenu()
+    {
+        MainMenu.SetActive(false);
+        playerInZone = false;
     }
 
     void GameLaunch()
     {
+        InGameHUD.SetActive(true);
         IsPlaying = true ;
         //choose the hunted player
         int RandomPlayer = Random.Range(0, AmountOfPlayer);
         huntedPlayer = huntedPlayerList[RandomPlayer];
 
         //debug to see the guys easily 
-        huntedPlayer.transform.position += new Vector3(0, 2f, 0);
+        huntedPlayer.transform.position += new Vector3(0, 1f, 0);
         HuntedIdText.text = "Player: "+ huntedPlayer.name;
 
         Hunted huntedScript = huntedPlayer.GetComponent<Hunted>();
@@ -101,7 +122,8 @@ public class GameFlow : MonoBehaviour
     }
 
     public void Win()
-    {
+    {   
+        InGameHUD.SetActive(false);
         playerFound = true;
         Debug.Log("you win");
         Debug.Log(timer);
@@ -134,5 +156,14 @@ public class GameFlow : MonoBehaviour
         Debug.Log("Time's Up!");
 
         GameOver();
+    }
+
+        void Update()
+    {
+        if (playerInZone && !IsPlaying && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            MainMenu.SetActive(false);
+            GameLaunch();
+        }
     }
 }
